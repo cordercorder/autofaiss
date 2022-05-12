@@ -195,6 +195,8 @@ def create_index(
                     index_type_ = faiss.swigfaiss_avx2
                 except AttributeError:
                     raise AttributeError("module 'faiss' has no attribute 'swigfaiss' or 'swigfaiss_avx2'")
+                except Exception as inner_e:
+                    raise Exception(f"unknown exception: {inner_e}")
             except Exception as e:
                 raise Exception(f"unknown exception: {e}")
             # Retrieve the embedded index if we are in an IndexPreTransform state
