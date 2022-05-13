@@ -189,10 +189,10 @@ def create_index(
 
         if make_direct_map:
             try:
-                moduel_ = faiss.swigfaiss
+                module_ = faiss.swigfaiss
             except AttributeError:
                 try:
-                    moduel_ = faiss.swigfaiss_avx2
+                    module_ = faiss.swigfaiss_avx2
                 except AttributeError:
                     raise AttributeError("module 'faiss' has no attribute 'swigfaiss' or 'swigfaiss_avx2'")
                 except Exception as inner_e:
@@ -200,13 +200,13 @@ def create_index(
             except Exception as e:
                 raise Exception(f"unknown exception: {e}")
             # Retrieve the embedded index if we are in an IndexPreTransform state
-            if isinstance(index, moduel_.IndexPreTransform):
+            if isinstance(index, module_.IndexPreTransform):
                 embedded_index = extract_index_ivf(index)
             else:
                 embedded_index = index
 
             # Make direct map is only implemented for IndexIVF and IndexBinaryIVF, see built file faiss/swigfaiss.py
-            if isinstance(embedded_index, (moduel_.IndexIVF, moduel_.IndexBinaryIVF)):
+            if isinstance(embedded_index, (module_.IndexIVF, module_.IndexBinaryIVF)):
                 embedded_index.make_direct_map()
         if distributed is None:
             for batch_id, (vec_batch, ids_batch) in enumerate(embedding_reader(batch_size=batch_size)):
